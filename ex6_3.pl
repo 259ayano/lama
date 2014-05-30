@@ -1,0 +1,4 @@
+#!/usr/bin/perl;
+use strict;
+
+#ÇÌÇ©ÇÁÇ»Ç¢ÅB
