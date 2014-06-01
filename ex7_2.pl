@@ -1,4 +1,4 @@
-#!/usr/bin/perl;
+﻿#!/usr/bin/perl;
 use strict;
 use 5.010;
 
@@ -35,7 +35,7 @@ while(1){
     # は 0個以上の空白です。つまり、空白(または空)だけの入力の場合にも
     # プログラムを終了させます。
 
-    if($input_num eq '' || $input_num eq 'quit' || $input_num eq 'exit'){
+    if($input_num =~ /quit|exit|^\s*$/i){
 	print "$msg\n";
 	last;
     }elsif($input_num == $secret_num){
