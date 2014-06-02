@@ -1,9 +1,10 @@
 #!/usr/bin/perl;
-use strict;
+# -*- coding: utf-8; mode: perl; -*-
 
+use strict;
 
 chomp(my $radius = <STDIN>);
 my $lengthCircle = $radius * 2 * 3.14;
 $lengthCircle = $radius * 2 * 3.14;
-print '‰~ü‚Ì’·‚³F'.$lengthCircle;
+print 'å††å‘¨ã®é•·ã•ï¼š'.$lengthCircle;
 

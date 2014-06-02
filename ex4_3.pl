@@ -17,12 +17,13 @@ sub average{
 
 sub above_average{
  my @result;
+ my $avg = average(@_);
  foreach (@_){
-  if($_ > average(@_)){
-   push @result,$_.",";
+  if($_ > $avg){
+   push @result , $_;
   }
  }
  @result;
 }
 my @fred = above_average(1..10);
-print @fred;
+print join (',' , @fred),"\n";
