@@ -1,8 +1,11 @@
 #!/usr/bin/perl;
+# -*- coding:utf-8; mode:perl; -*-
+
 use strict;
 
 
-#‚í‚©‚ç‚È‚¢B
+
+#ã‚ã‹ã‚‰ãªã„ã€‚
 foreach my $key(sort keys %ENV){
     printf "$key, $ENV{$key}","\n";
 }

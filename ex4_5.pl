@@ -1,8 +1,10 @@
 #!/usr/bin/perl;
+# -*- coding:utf-8; mode:perl; -*-
+
 use strict;
 use 5.010;
 
-#ˆ¥A‚µ‚Ü‚·B
+#æŒ¨æ‹¶ã—ã¾ã™ã€‚
 sub greet{
  state @last_person;
  my $name = $_[0];
