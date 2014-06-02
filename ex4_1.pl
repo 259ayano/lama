@@ -1,6 +1,8 @@
 #!/usr/bin/perl;
 use strict;
 
+#commit test
+
 sub total{
  my $sum = 0;
  foreach my $num(@_){
