@@ -1,9 +1,11 @@
 #!/usr/bin/perl;
+# -*- mode: perl; coding: utf-8; -*-
+
 use strict;
 
 chomp(my $radius = <STDIN>);
-if($radius < 0){
- $radius = 0;
-}
+
+$radius = 0 if ($radius < 0);
+
 my $lengthCircle = $radius * 2 * 3.14;
-print '‰~ü‚Ì’·‚³F'.$lengthCircle;
+print "å††å‘¨ã®é•·ã•ï¼š$lengthCircle\n";
