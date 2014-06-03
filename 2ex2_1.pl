@@ -1,6 +1,6 @@
 #!/usr/bin/perl
-use strict;
 
+use strict;
 
 #-sは、ファイルサイズを取得する演算子
 
@@ -16,3 +16,6 @@ print map "    $_\n", @files;
 =cut
 
 print map "    $_\n", grep -s $_ < 1000, @ARGV;
+
+# grep と map をネストしないのであれば、次のように書くこともできるね。
+# print map { -s $_ < 1000 ? "    $_\n" : () } @ARGV;
