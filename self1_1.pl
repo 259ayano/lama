@@ -38,3 +38,8 @@ sub myjoin {
     $str .= $arr[$_] . $sep for (0..$#_-1);
     $str .= $arr[-1];
 }
+
+sub join_easy {
+    local $" = shift;
+    "@_";
+}
