@@ -49,8 +49,8 @@ for (@files){
     open( OLD, "< $baseFile");
     open( NEW, "> $tempfile");
     while( <OLD> ){
-print NEW $_;
-print NEW $a if($. == 4);
+		print NEW $_;
+		print NEW $a if($. == 4);
     }
     close(OLD);
     close(NEW);
