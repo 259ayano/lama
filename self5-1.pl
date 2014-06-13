@@ -25,26 +25,23 @@ my %data;
 
 for (0..$#door_list){
     my @date = split(/T/,$door_list[$_][0]);
-    my ($year,$month,$day) = split(/-/,@date[0]);
     my $staff = Encode::encode('utf8',$door_list[$_][2]);
-    $data{"$year-$month"}->{$staff} += 1;
+    $data{"$date[0]"}->{$staff} += 1;
 }
-#print Dumper \%data;
 
-print "year-month | ";
+print "   date    | ";
 for (0..$#files){
     $files[$_] =~ s/.pl//;
     print "$files[$_] | ";
 }
 print "\n";
+print "-" x 30,"\n";
 
-for (keys %data){
-    printf ("%10s",$_);
-    print " | ";
+for (sort keys %data){
+    printf ("%10s | ",$_);
     my %a = %{$data{$_}};
     for (keys %a){
-	printf ("%5s",$a{$_ });
-	print " | "
+	printf ("%5s | ",$a{$_ });
     }
     print "\n";
 }
