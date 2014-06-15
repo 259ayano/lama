@@ -18,7 +18,8 @@ print "@fulls";
 =cut
 
 my @fulls = map {"    ".File::Spec->catfile($cur_dir,$_)."\n"} @all_files;
-print $fulls[$_] for (0..$#fulls);
+print for @fulls;
+#print $fulls[$_] for (0..$#fulls);
 #local $";
 #print "@fulls";
 #$" = ' ';
