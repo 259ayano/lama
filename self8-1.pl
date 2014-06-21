@@ -1,4 +1,9 @@
 #!/usr/bin/perl
+#use 5.010;
+use feature qw(say);
+
+#warningsプラグマは、コンパイルエラーにはならないが、望ましくないことを警告する機能がある。
+use warnings;
 use strict;
 
 =eval
@@ -78,12 +83,14 @@ for my $file(@files){
 =cut
 
 
-=array_slice
+
 #配列スライス
 my @line = 0..15;
 my @newline = @line[1, 3, 5, 7];
-print "@newline\n"; 
-=cut
+for (@newline){
+    say $_;
+} 
+
 
 
 =hash_slice
@@ -100,4 +107,5 @@ my %people = (
 
 my @select = ($people{$name[0]}, $people{$name[3]});
 print "@select";
+
 =cut
