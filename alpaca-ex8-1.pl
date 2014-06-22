@@ -1,27 +1,25 @@
 #!/usr/bin/perl
 use common::sense;
+use IO::Tee;
 
-
-my($file,$scolor,$both);
+my $scalar;
 my $fh;
 
 say "Please chouse input type, file or scolor or both";
 
-my $input = <STDIN>;
+chomp(my $input = <STDIN>);
 
 
 if ( $input =~ /^f/ ){
-#ファイルを選択した場合
-    open $fh,'>>',\$file;
+    open $fh,'>>','log.txt';
     
 }elsif ( $input =~ /^s/ ){
-
-    open $fh,'>>','log.txt';
+    open $fh,'>>',\$scalar;
 
 }elsif ( $input =~ /^b/ ){
-    open my $file_fh,'>>',\$file;
-    open my $scolor_fh,'>>','log.txt';
-    $fh = IO::Tee->new( $file_fh , $scolor_fh );
+    open my $scalar_fh,'>>',\$scalar;
+    open my $file_fh,'>>','log.txt';
+    $fh = IO::Tee->new( $file_fh , $scalar_fh );
 
 }else{
     say "Please input correct pattern.";
@@ -29,10 +27,11 @@ if ( $input =~ /^f/ ){
 
 
 #sec,min,hour,mday,mon,year,wday,yday,isdst
-my @week = qw(日 月 火 水 木 金 土);
+my @week = qw(Sun Mon Tue Wed Thu Fri Sat);
 my @localtime = localtime;
 my $date_data = $localtime[3]."(".$week[$localtime[6]].")";
 
 eval{
 print $fh $date_data;
+print STDOUT $scalar;
 };
