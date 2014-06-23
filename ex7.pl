@@ -32,6 +32,11 @@ say "--------------------------";
 #フレッドと文乃に一致しているものを表示する。
 print grep /fred|ayano/i, @data;
 
+say "--------------------------";
+
+#任意個の逆スラッシュの後に、任意個の＊が続くものを全て表示する。
+print grep /\\+\*+/, @data;
+
 __DATA__
 Fred
 Nao
@@ -46,3 +51,7 @@ AYANO
 Mississippi
 Bamm-Bamm
 llama
+\\**
+barney \\\***
+*wilma\
+\*ayano
