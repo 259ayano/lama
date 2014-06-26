@@ -5,13 +5,14 @@ use IO::File;
 
 my $log = IO::File->new('log_file.txt') or die "no file. : $!";
 my %person_info;
+my $fh;
 
 while(<$log>){
-    if(/(^.*):/){
-	my $fh = IO::File->new(">> $1.txt");
-	$person_info{$1} = $fh;
-	print $fh $_;
-    }
+    next unless (/^(.+):/);
+    my $name = $1;
+    $person_info{$name} = IO::File->new(">> $name.txt") or die "Can't create file" unless $person_info{$name};
+    print {$person_info{$name}} $_;
+
 }
 
 #print Dumper \%person_info;

@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 use common::sense;
+use Test::More;
 
 my @data = <DATA>;
 
@@ -36,6 +37,9 @@ say "--------------------------";
 
 #任意個の逆スラッシュの後に、任意個の＊が続くものを全て表示する。
 print grep /\\+\*+/, @data;
+
+
+like ($_, qr/\\+\*+/, $_) for (@data);
 
 __DATA__
 Fred
