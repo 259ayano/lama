@@ -1,12 +1,27 @@
 #!/usr/bin/perl
 use strict;
+use Getopt::Std;
 
-{ package Animal;
+{ package LivingCreature;
   sub speak {
       my $class = shift;
-      print "a $class goes ", $class->sound, "!\n";
+      if ( @_ ){
+	  print "a $class goes @_ !\n";	  
+      }else{
+	  print "a $class goes ", $class->sound, "!\n";	  
+      }
   }
 }
+
+{ package Animal;
+  our @ISA = qw(LivingCreature);
+}
+
+{ package Person;
+  our @ISA = qw(LivingCreature);
+  sub sound { 'Oh,Yes' }
+}
+
 { package Cow;
   our @ISA = qw(Animal);
   sub sound { 'Moooo' }
@@ -30,20 +45,23 @@ use strict;
     
 }
 
-print "Please input c(Cow) or h(Horse) or s(Sheep) or m(Mouse)\n";
-chomp( my @animals = <STDIN>);
+print "Please input c(Cow) or h(Horse) or s(Sheep) or m(Mouse) or p(Person)\n";
+chomp( my @creatures = <STDIN>);
+our %opts;
+getopts('c:',\%opts);
 
-for ( @animals ){
-    my $animal = 
+for ( @creatures ){
+    my $c = 
 	/^c+$/i ? "Cow" : 
 	/^h+$/i ? "Horse" : 
 	/^S+$/i ? "Sheep" :
 	/^m+$/i ? "Mouse" :
+	/^p+$/i ? "Person" :
 	"Other";
     
-    if ( $animal eq "Other" ){
-	print "Please input correct animal.";
+    if ( $c eq "Other" ){
+	print "Please input correct Creature.";
     }else{
-	$animal->speak;
+	$c->speak($opts{c});
     }
 }
