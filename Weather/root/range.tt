@@ -1,0 +1,59 @@
+[% WRAPPER wrapper.tt
+highcharts = 1
+tablesorter = [[0,0]]
+%]
+
+<script type="text/javascript">
+  $(function () {
+  $('#chart').highcharts({
+  credits: { enabled: false },
+  title: {
+  text: [% chart.title.json %],
+  },
+  subtitle: {
+  text: '',
+  },
+  xAxis: {
+  categories: [% chart.categories.json %],
+  },
+  yAxis: {
+  title: {
+  text: null,
+  },
+  labels: {
+  'format': '{value:,.0f}',
+  },
+  plotLines: [{
+  value: 0,
+  width: 1,
+  color: '#808080'
+  }]
+  },
+  tooltip: {
+  valueSuffix: '￥'
+  },
+  legend: {
+  layout: 'vertical',
+  align: 'right',
+  verticalAlign: 'middle',
+  borderWidth: 0
+  },
+  series: [% chart.series.json %],
+  });
+  });
+  </script>
+
+<form method="post" action="[% c.uri_for(c.action) %]">
+  <div style="padding: 3px;">Search:
+	<input type="text" name="m" id="search-input" value="[% m %]" style="width: 60px;">
+	<input type="text" name="q" autofocus="autofocus" id="search-input" value="[% q %]" style="width: 240px;">
+	<button type="submit" name="submit" value="yes" class="blue">Search</button>
+	<button type="submit" name="csv" value="yes" class="green">CSV</button>
+	<br>
+  </div>
+</form>
+
+<div id="chart" style="float: right; width: 25%; left:75%; width: 450px; height: 300px; margin: 0 auto;">
+</div>
+
+[%- END # WRAPPER %]
