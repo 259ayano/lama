@@ -733,3 +733,10 @@ ul.tabnav-tabs {
 	color: #B2B2B2 !important;
 	text-decoration: line-through;
 }
+
+.chart {
+	min-width: 320px;
+	max-width: 800px;
+	height: 220px;
+	margin: 0 auto;
+}
