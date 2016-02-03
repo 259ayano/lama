@@ -107,9 +107,6 @@ my $block =[ {name => "白糸", value => 0440},
 			 {name => "富士山", value =>7639 }];
 
 =cut
-#my @block_def = qw/浜松 佐久間 天竜 磐田 御前崎 菊川牧野原 川根本町
-#                   井川 静岡 清水 富士 富士山 御殿場 三島 石廊崎 網代/;
-#my @block = @ARGV ? @ARGV : @block_def;
 
 # 気象庁のサイトにアクセスしてデータを取得
 #for (@block){
