@@ -1,7 +1,7 @@
 package Weather::Controller::Data;
 use Moose;
 use namespace::autoclean;
-#use CGI::Expand qw/expand_hash/;
+use CGI::Expand qw/expand_hash/;
 use Data::Dumper;
 use LWP::UserAgent;
 use HTML::TreeBuilder;
@@ -27,11 +27,12 @@ Catalyst Controller.
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
-	my $param = $c->req->params;
+	my $param = expand_hash($c->req->params);
+	my $search = $param->{search};
 	my $prec_tbl  = "tsv/prec";
 	my $block_tbl = "tsv/block";
 
-	my $target = $param->{hint} || 50; # XXXXX 
+	my $target = $search->{hint} || 50; # XXXXX 
 	my @prec   = `grep -e $target $prec_tbl`;
 
 	my $list;
@@ -47,12 +48,18 @@ sub index :Path :Args(0) {
 			my %param = (
 				prec_no => $prec_code,
 				block_no => $block_code,
-				year => 2011, month => 6, day => 24,
+				year => $search->{year},
+				month => $search->{month},
+				day => $search->{day},
 				elm => 'hourly',
 				view => '',
 				);
 
 			my $ua  = LWP::UserAgent->new;
+
+			my $temp = $url . join('&', map { "$_=$param{$_}" } keys %param);
+			warn Dumper $temp;
+
 			my $res = $ua->get($url . join('&', map { "$_=$param{$_}" } keys %param));
 			my $con = $res->content;
 			
@@ -95,8 +102,15 @@ sub index :Path :Args(0) {
 			}
 		}
 	}
+
+	my $year_list  = ['',1872..2016];
+	my $month_list = ['',1..12];
+	my $day_list   = ['',1..31];
+	$c->stash->{year_list}  = $year_list;
+	$c->stash->{month_list} = $month_list;
+	$c->stash->{day_list}   = $day_list;
 	$c->stash->{list} = $list;
-	$c->stash->{hint} = $target;
+	$c->stash->{search} = $search;
     $c->stash->{template} = 'data.tt';
 }
 
