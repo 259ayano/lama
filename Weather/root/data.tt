@@ -1,0 +1,68 @@
+[% WRAPPER wrapper.tt
+highcharts = 1
+tablesorter = [[0,0]]
+%]
+
+<form method="post" action="[% c.uri_for(c.action) %]">
+  <div style="padding: 3px;">Search:
+	<input type="text" name="hint" autofocus="autofocus" id="hint" value="[% hint %]" style="width: 240px;">
+	<button type="submit" name="submit" value="yes" class="blue">Search</button>
+	<button type="submit" name="csv" value="yes" class="green">CSV</button>
+	<br>
+  </div>
+</form>
+
+[%- FOREACH p IN list %]
+<h2>[% p.key %]</h2>
+[%- FOREACH b IN p.value %]
+<h3>[% b.key %]</h3>
+<table class="sort" id="list">
+  <thead class="header">
+	<tr>
+	  <th nowrap>時刻</th>
+	  <th nowrap>気圧(現地)</th>
+	  <th nowrap>気圧(海面)</th>
+	  <th nowrap>降水量</th>
+	  <th nowrap>気温</th>
+	  <th nowrap>露天温度</th>
+	  <th nowrap>蒸気圧</th>
+	  <th nowrap>湿度</th>
+	  <th nowrap>風向</th>
+	  <th nowrap>風速</th>
+	  <th nowrap>日照時間</th>
+	  <th nowrap>日射量</th>
+	  <th nowrap>降雪</th>
+	  <th nowrap>積雪</th>
+	  <th nowrap>天気</th>
+	  <th nowrap>雲量</th>
+	  <th nowrap>視程</th>
+	</tr>
+  </thead>
+  <tbody>
+	[%- FOREACH r = b.value %]
+	<tr>
+	  <td class="center" nowrap>[% r.hour %]</td>
+	  <td class="center" nowrap>[% r.kiatsu1 %]</td>
+	  <td class="center" nowrap>[% r.kiatsu2 %]</td>
+	  <td class="center" nowrap>[% r.rain %]</td>
+	  <td class="center" nowrap>[% r.temp %]</td>
+	  <td class="center" nowrap>[% r.roten %]</td>
+	  <td class="center" nowrap>[% r.jyoki %]</td>
+	  <td class="center" nowrap>[% r.wet %]</td>
+	  <td class="center" nowrap>[% r.wind1 %]</td>
+	  <td class="center" nowrap>[% r.wind2 %]</td>
+	  <td class="center" nowrap>[% r.sun1 %]</td>
+	  <td class="center" nowrap>[% r.sun2 %]</td>
+	  <td class="center" nowrap>[% r.snow1 %]</td>
+	  <td class="center" nowrap>[% r.snow2 %]</td>
+	  <td class="center" nowrap>[% r.tenki %]</td>
+	  <td class="center" nowrap>[% r.cloud %]</td>
+	  <td class="center" nowrap>[% r.see %]</td>
+	</tr>
+	[%- END %]
+  </tbody>
+</table>
+[%- END %]
+[%- END %]
+
+[%- END # WRAPPER %]

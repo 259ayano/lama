@@ -6,7 +6,6 @@ use common::sense;
 use Data::Dumper;
 use LWP::UserAgent;
 use HTML::TreeBuilder;
-use Text::CSV;
 
 my $prec_tbl  = './tsv/prec';
 my $block_tbl = './tsv/block';
