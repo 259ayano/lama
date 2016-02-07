@@ -27,7 +27,7 @@ tablesorter = [[0,0]]
 
 </form>
 
-[%- FOREACH p IN list %]
+[%- FOREACH p IN show %]
 <h2>[% p.key %]</h2>
 [%- FOREACH b IN p.value %]
 <h3>[% b.key %]</h3>

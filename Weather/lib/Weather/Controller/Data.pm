@@ -5,6 +5,7 @@ use CGI::Expand qw/expand_hash/;
 use Data::Dumper;
 use LWP::UserAgent;
 use HTML::TreeBuilder;
+use Data::Recursive::Encode;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
@@ -35,7 +36,7 @@ sub index :Path :Args(0) {
 	my $target = $search->{hint} || 50; # XXXXX 
 	my @prec   = `grep -e $target $prec_tbl`;
 
-	my $list;
+	my ($show,$list);
 	for (@prec) {
 		chomp;
 		my ($prec_name, $prec_code) = split "," , $_;
@@ -56,10 +57,6 @@ sub index :Path :Args(0) {
 				);
 
 			my $ua  = LWP::UserAgent->new;
-
-			my $temp = $url . join('&', map { "$_=$param{$_}" } keys %param);
-			warn Dumper $temp;
-
 			my $res = $ua->get($url . join('&', map { "$_=$param{$_}" } keys %param));
 			my $con = $res->content;
 			
@@ -78,6 +75,8 @@ sub index :Path :Args(0) {
 			for my $tr ($tree->look_down('id','tablefix1')->find('tr')) {
 				my $line;
 				my $count = 0;
+				$line->{prec}  = $prec_code;
+				$line->{block} = $block_code;
 				for ($tr->find('td')){
 					$line->{hour} = $_->as_text if $count == 0;
 					$line->{kiatsu1} = $_->as_text if $count == 1;
@@ -98,23 +97,42 @@ sub index :Path :Args(0) {
 					$line->{see} = $_->as_text if $count == 16;
 					$count++;
 				}
-				push @{$list->{$prec_code}->{$block_code}}, $line;
+				push @$list, $line;
+				push @{$show->{$prec_code}->{$block_code}}, $line;
 			}
 		}
 	}
 
+	if($param->{csv}){
+		my $file = 'tenki.csv';
+		my $data = &list2csv($list);
+		$c->stash(data => $data, current_view => 'CSV', filename => $file);
+		return;
+	}
+	
 	my $year_list  = ['',1872..2016];
 	my $month_list = ['',1..12];
 	my $day_list   = ['',1..31];
 	$c->stash->{year_list}  = $year_list;
 	$c->stash->{month_list} = $month_list;
 	$c->stash->{day_list}   = $day_list;
-	$c->stash->{list} = $list;
+	$c->stash->{show} = $show;
 	$c->stash->{search} = $search;
     $c->stash->{template} = 'data.tt';
 }
 
 
+sub list2csv {
+	my $list = $_[0];
+	my @field = qw/prec block hour kiatsu1 kiatsu2 rain temp
+		roten jyoki wet wind1 wind2 sun1 sun2 snow1 snow2
+		tenki cloud see/;
+	my $csv = [
+		[ map { $_ } @field ],
+		map { my $x = $_; [ map { $x->{$_} } @field ]; } @$list
+		];
+	Data::Recursive::Encode->encode('utf8', $csv);
+}
 
 =encoding utf8
 
