@@ -49,13 +49,12 @@ sub index :Path :Args(0) {
 			my %param = (
 				prec_no => $prec_code,
 				block_no => $block_code,
-				year => $search->{year},
-				month => $search->{month},
-				day => $search->{day},
+				year => $search->{year} || '2016',
+				month => $search->{month} || '2',
+				day => $search->{day} || '8' ,
 				elm => 'hourly',
 				view => '',
 				);
-
 			my $ua  = LWP::UserAgent->new;
 			my $res = $ua->get($url . join('&', map { "$_=$param{$_}" } keys %param));
 			my $con = $res->content;
@@ -131,7 +130,8 @@ sub list2csv {
 		[ map { $_ } @field ],
 		map { my $x = $_; [ map { $x->{$_} } @field ]; } @$list
 		];
-	Data::Recursive::Encode->encode('utf8', $csv);
+#	Data::Recursive::Encode->encode('utf-8', $csv);
+	$csv;
 }
 
 =encoding utf8

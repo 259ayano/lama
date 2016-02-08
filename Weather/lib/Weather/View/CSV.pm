@@ -7,7 +7,7 @@ use warnings;
 __PACKAGE__->config (
 	sep_char => ",",
 	suffix => "csv",
-	charset => 'utf8',
+#	charset => 'utf-8',
 	binary => 1,
 #	always_quote => 1,
 	);
