@@ -716,11 +716,7 @@ $(function () { // On DOM ready...
 
 	// Set the hash to the yr.no URL we want to parse
 	if (!location.hash) {
-		var place = 'United_Kingdom/England/London';
-		//place = 'France/Rhône-Alpes/Val_d\'Isère~2971074';
-		//place = 'Norway/Sogn_og_Fjordane/Vik/Målset';
-		//place = 'United_States/California/San_Francisco';
-		//place = 'United_States/Minnesota/Minneapolis';
+		var place = '[% position %]';
 		location.hash = 'https://www.yr.no/place/' + place + '/forecast_hour_by_hour.xml';
 
 	}
@@ -740,15 +736,33 @@ $(function () { // On DOM ready...
 
 <form method="post" action="[% c.uri_for(c.action) %]">
   <div style="padding: 3px;">Search:
-	<input type="text" name="m" id="search-input" value="[% m %]" style="width: 60px;">
-	<input type="text" name="q" autofocus="autofocus" id="search-input" value="[% q %]" style="width: 240px;">
+	<input type="text" name="search.hint" autofocus="autofocus" id="hint" value="[% search.hint %]" style="width: 150px;">
 	<button type="submit" name="submit" value="yes" class="blue">Search</button>
-	<button type="submit" name="csv" value="yes" class="green">CSV</button>
-	<br>
   </div>
 </form>
 
+[% UNLESS position %]
+<table class="sort" id="list">
+  <thead class="header">
+	<tr>
+	  <th nowrap>#</th>
+	  <th nowrap>name</th>
+	  <th nowrap>access</th>
+	</tr>
+  </thead>
+  <tbody>
+	[%- FOREACH h = href %]
+	<tr>
+	  <td class="left" nowrap>[% loop.count %]</td>
+	  <td class="left" nowrap>[% h.key %]</td>
+	  <td class="left" nowrap><a href="[% c.uri_for('/position', { p => h.value }) %]" title="[% h.key %]">[% h.value %]<a></td>
+	</tr>
+	[%- END %]
+  </tbody>
+</table>
+[% ELSE %]
 <div id="container" class="chart" style="float: center; width: 100%; margin: 0 auto;">
 </div>
+[% END %]
 
 [%- END # WRAPPER %]
