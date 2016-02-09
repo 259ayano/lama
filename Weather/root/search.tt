@@ -1,0 +1,39 @@
+[% WRAPPER wrapper.tt
+tablesorter = [[0,0]]
+%]
+
+<script type="text/javascript">
+function getAddress() {
+  var address = document.getElementById("address").value;
+  geocoder.getLocations(address, markAddress);
+}
+
+function markAddress(obj) {
+  if (obj.Status.code == G_GEO_SUCCESS){
+      var names = check(obj, "");
+ 	  location.href='[% c.uri_for('/search', { search => names }) %]'
+  }
+}
+
+function check(obj, str){
+  var names = "";
+  for (var name in obj){
+    if (typeof obj[name] == "object"){
+      names += check(obj[name], str + name + ".") + "\n";
+    }else{
+      names += str + name + "=" + obj[name] + "\n";
+    }
+  }
+  return names;
+}
+</script>
+
+<div id="map_canvas" style="width: 0px; height: 0px"></div>
+<form>
+  <p>
+    <input type="text" id="address" size="30" value="住所を入力" />
+    <input type="button" id="addressbtn" value="座標取得" onclick="getAddress()" />
+  </p>
+</form>
+
+[%- END # WRAPPER %]
