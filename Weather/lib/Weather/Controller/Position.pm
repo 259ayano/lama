@@ -29,10 +29,10 @@ Catalyst Controller.
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 	my $params = expand_hash($c->req->params);
-	my $search = $params->{search};
+	my $hint = $params->{search}{hint} || '静岡';
 	my $position = $params->{p};
 
-	my $url = "http://www.yr.no/soek/soek.aspx?sted=$search->{hint}";
+	my $url = "http://www.yr.no/soek/soek.aspx?sted=$hint";
 	my $ua  = LWP::UserAgent->new;
 	my $res = $ua->get($url);
 	my $con = $res->content;
@@ -43,7 +43,7 @@ sub index :Path :Args(0) {
 	my %href = map {$_->attr('title'),$_->attr('href')} $tree->look_down('id',$id)->find('a');
 
 	
-	$c->stash->{search}   = $search;
+	$c->stash->{search}   = $params->{search};
 	$c->stash->{href}     = \%href;
 	$position =~ s/\/sted\/(.+)/$1/;
 	$c->stash->{position} = $position;

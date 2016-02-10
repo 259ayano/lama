@@ -11,7 +11,8 @@ function getAddress() {
 function markAddress(obj) {
   if (obj.Status.code == G_GEO_SUCCESS){
       var names = check(obj, "");
- 	  location.href='[% c.uri_for('/search', { search => names }) %]'
+	  var url = '[% c.uri_for('/search') %]';
+ 	  location.href = url + "?search=" + names;
   }
 }
 
@@ -21,7 +22,7 @@ function check(obj, str){
     if (typeof obj[name] == "object"){
       names += check(obj[name], str + name + ".") + "\n";
     }else{
-      names += str + name + "=" + obj[name] + "\n";
+      names += str + name + "=" + obj[name] + ":" + "\n";
     }
   }
   return names;
@@ -29,10 +30,10 @@ function check(obj, str){
 </script>
 
 <div id="map_canvas" style="width: 0px; height: 0px"></div>
-<form>
+<form onsubmit="getAddress()">
   <p>
     <input type="text" id="address" size="30" value="住所を入力" />
-    <input type="button" id="addressbtn" value="座標取得" onclick="getAddress()" />
+    <input type="button" id="addressbtn" value="座標取得" />
   </p>
 </form>
 

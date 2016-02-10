@@ -14,7 +14,7 @@
 	<script type="text/javascript" src="[% c.uri_for('/static/js/jquery-1.9.1.js') %]"></script>
 	<script type="text/javascript" src="[% c.uri_for('/static/js/jquery-ui-1.9.2.custom.js') %]"></script>
     <script type="text/javascript" src="[% c.uri_for('/static/js/linq.min.js') %]"></script>
-    <script src="http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAUiSm4yE-UDgb8kviBG-3fxTET7FL1OGiEo0132Tsz7xytqsKmxTD2VNE7QBz0JNWWmZzj89DQ44VNA&sensor=false"
+    <script src="http://maps.google.com/maps?hl=en&file=api&v=2&key=ABQIAAAAUiSm4yE-UDgb8kviBG-3fxTET7FL1OGiEo0132Tsz7xytqsKmxTD2VNE7QBz0JNWWmZzj89DQ44VNA&sensor=false"
             type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" src="[% c.uri_for('/static/js/code2_1.js') %]"></script>
 	

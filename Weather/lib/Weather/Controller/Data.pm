@@ -35,6 +35,21 @@ sub index :Path :Args(0) {
 
 	my $target = $search->{hint} || 50; # XXXXX 
 	my @prec   = `grep -e $target $prec_tbl`;
+	my @monthly = qw/month kiatsu1 kiatsu2 rain_sum rain_d_max rain_h_max rain_10_max
+                     temp_d_ave temp_d_max temp_d_min temp_max temp_min
+                     wet_ave wet_min wind_ave wind_max1 wind_max_dir1
+                     wind_max2 wind_max_dir2 sun1 sun2 snow_sum snow_sum_max snow_max
+                     cloud_ave snow_day mist_day Thunder_day/;
+	my @daily   = qw/day kiatsu1 kiatsu2 rain_sum rain_h_max rain_10_max
+                     temp_d_ave temp_d_max temp_d_min wet_ave wet_min wind_ave
+                     wind_max1 wind_max_dir1 wind_max2 wind_max_dir2 sun
+                     snow_sum snow_max tenki tenki_n/;
+	my @hourly  = qw/hour kiatsu1 kiatsu2 rain temp roten jyoki wet wind wind_dir
+                     sun1 sun2 snow1 snow2 tenki cloud see/;
+	my $y  = $search->{year} || '';	my $m = $search->{month} || ''; my $d = $search->{day} || '';
+	my $type = $y && $m && $d ? 'hourly' : $y && $m ? 'daily' :	$y ? 'monthly' : '';
+	my @key = $type eq 'hourly'  ? @hourly : $type eq 'daily'   ? @daily  :
+		      $type eq 'monthly' ? @monthly  : ();
 
 	my ($show,$list);
 	for (@prec) {
@@ -45,16 +60,17 @@ sub index :Path :Args(0) {
 		for (@block) {
 			chomp;
 			my ($block_name, $prec_code, $block_code) = split "," , $_;
-			my $url = 'http://www.data.jma.go.jp/obd/stats/etrn/view/hourly_s1.php?';
+			my $url = "http://www.data.jma.go.jp/obd/stats/etrn/view/${type}_s1.php?";
 			my %param = (
 				prec_no => $prec_code,
 				block_no => $block_code,
-				year => $search->{year} || '2016',
-				month => $search->{month} || '2',
-				day => $search->{day} || '8' ,
-				elm => 'hourly',
+				year => $y || '2016',
+				month => $m,
+				day => $d,
+#				elm => $elm,
 				view => '',
 				);
+
 			my $ua  = LWP::UserAgent->new;
 			my $res = $ua->get($url . join('&', map { "$_=$param{$_}" } keys %param));
 			my $con = $res->content;
@@ -77,23 +93,7 @@ sub index :Path :Args(0) {
 				$line->{prec}  = $prec_code;
 				$line->{block} = $block_code;
 				for ($tr->find('td')){
-					$line->{hour} = $_->as_text if $count == 0;
-					$line->{kiatsu1} = $_->as_text if $count == 1;
-					$line->{kiatsu2} = $_->as_text if $count == 2;
-					$line->{rain} = $_->as_text if $count == 3;
-					$line->{temp} = $_->as_text if $count == 4;
-					$line->{roten} = $_->as_text if $count == 5;
-					$line->{jyoki} = $_->as_text if $count == 6;
-					$line->{wet} = $_->as_text if $count == 7;
-					$line->{wind1} = $_->as_text if $count == 8;
-					$line->{wind2} = $_->as_text if $count == 9;
-					$line->{sun1} = $_->as_text if $count == 10;
-					$line->{sun2} = $_->as_text if $count == 11;
-					$line->{snow1} = $_->as_text if $count == 12;
-					$line->{snow2} = $_->as_text if $count == 13;
-					$line->{tenki} = $_->as_text if $count == 14;
-					$line->{cloud} = $_->as_text if $count == 15;
-					$line->{see} = $_->as_text if $count == 16;
+					$line->{$key[$count]} = $_->as_text;
 					$count++;
 				}
 				push @$list, $line;
@@ -104,7 +104,7 @@ sub index :Path :Args(0) {
 
 	if($param->{csv}){
 		my $file = 'tenki.csv';
-		my $data = &list2csv($list);
+		my $data = &list2csv($list,\@key);
 		$c->stash(data => $data, current_view => 'CSV', filename => $file);
 		return;
 	}
@@ -115,6 +115,8 @@ sub index :Path :Args(0) {
 	$c->stash->{year_list}  = $year_list;
 	$c->stash->{month_list} = $month_list;
 	$c->stash->{day_list}   = $day_list;
+	$c->stash->{th} = \@key;
+#	$c->stash->{type} = $type;
 	$c->stash->{show} = $show;
 	$c->stash->{search} = $search;
     $c->stash->{template} = 'data.tt';
@@ -123,12 +125,10 @@ sub index :Path :Args(0) {
 
 sub list2csv {
 	my $list = $_[0];
-	my @field = qw/prec block hour kiatsu1 kiatsu2 rain temp
-		roten jyoki wet wind1 wind2 sun1 sun2 snow1 snow2
-		tenki cloud see/;
+	my $title = $_[1];
 	my $csv = [
-		[ map { $_ } @field ],
-		map { my $x = $_; [ map { $x->{$_} } @field ]; } @$list
+		[ map { $_ } @$title ],
+		map { my $x = $_; [ map { $x->{$_} } @$title ]; } @$list
 		];
 #	Data::Recursive::Encode->encode('utf-8', $csv);
 	$csv;
