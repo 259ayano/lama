@@ -23,7 +23,43 @@ Catalyst Controller.
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
+	my $prec_tbl  = 'tsv/prec';
+	my $block_tbl = 'tsv/block';
+	my $url = 'http://www.data.jma.go.jp/obd/stats/etrn/view/monthly_s1.php?';
+	my $param = expand_hash($c->req->params);
+	my $search = $param->{search};
+	my $prec_hint  = $search->{prec_hint}  || 50; # XXXXX 
+	my $block_hint = $search->{block_hint} || 47656; # XXXXX 
+	my @prec  = `grep -e $prec_hint $prec_tbl`;
+	my @block = `grep -e $block_hint $block_tbl`;
 
+	my %param = (
+		prec_no => $prec_hint,
+		block_no => $block_hint,
+		year => $search->{year} || '2016',
+		month => '',day => '',view => '',
+		);
+
+	my $ua  = LWP::UserAgent->new;
+	my $res = $ua->get($url . join('&', map { "$_=$param{$_}" } keys %param));
+	my $con = $res->content;
+	
+	my $tree = HTML::TreeBuilder->new;
+	$tree->parse($con);
+
+	# データの部分を抽出する
+	my $list;
+	for my $tr ($tree->look_down('id','tablefix1')->find('tr')) {
+		my $line;
+		$line->{prec}  = $prec_hint;
+		$line->{block} = $block_hint;
+		push @$line, $_->as_text for ($tr->find('td'));
+		push @$list, $line;
+	}
+
+	$c->stash->{prec_list} = \@prec;
+	$c->stash->{block_list} = \@block;
+    $c->stash->{list} = $list;
     $c->stash->{template} = 'range.tt';
 }
 
