@@ -27,7 +27,6 @@ sub index :Path :Args(0) {
 	my $params = $c->req->params;
 
 	my %data =  map { split '=' , $_ } split(':',$params->{search});
-	warn Dumper $data{"Placemark.0.address"};
 
     $c->stash->{template} = 'search.tt';
 }
