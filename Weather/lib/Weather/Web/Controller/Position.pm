@@ -1,4 +1,4 @@
-package Weather::Controller::Position;
+package Weather::Web::Controller::Position;
 use Moose;
 use namespace::autoclean;
 use CGI::Expand qw/expand_hash/;
@@ -11,7 +11,7 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-Weather::Controller::Position - Catalyst Controller
+Weather::Web::Controller::Position - Catalyst Controller
 
 =head1 DESCRIPTION
 

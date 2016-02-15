@@ -1,4 +1,4 @@
-package Weather::View::TT;
+package Weather::Web::View::TT;
 use Moose;
 use namespace::autoclean;
 
@@ -11,7 +11,7 @@ __PACKAGE__->config(
 
 =head1 NAME
 
-Weather::View::TT - TT View for Weather
+Weather::Web::View::TT - TT View for Weather
 
 =head1 DESCRIPTION
 

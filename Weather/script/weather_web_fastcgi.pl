@@ -1,17 +1,17 @@
 #!/usr/bin/env perl
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('Weather', 'FastCGI');
+Catalyst::ScriptRunner->run('Weather::Web', 'FastCGI');
 
 1;
 
 =head1 NAME
 
-weather_fastcgi.pl - Catalyst FastCGI
+weather_web_fastcgi.pl - Catalyst FastCGI
 
 =head1 SYNOPSIS
 
-weather_fastcgi.pl [options]
+weather_web_fastcgi.pl [options]
 
  Options:
    -? --help      display this help and exit

@@ -1,13 +1,13 @@
 #!/usr/bin/env perl
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('Weather', 'CGI');
+Catalyst::ScriptRunner->run('Weather::Web', 'CGI');
 
 1;
 
 =head1 NAME
 
-weather_cgi.pl - Catalyst CGI
+weather_web_cgi.pl - Catalyst CGI
 
 =head1 SYNOPSIS
 

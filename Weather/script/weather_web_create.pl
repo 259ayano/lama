@@ -4,17 +4,17 @@ use strict;
 use warnings;
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('Weather', 'Create');
+Catalyst::ScriptRunner->run('Weather::Web', 'Create');
 
 1;
 
 =head1 NAME
 
-weather_create.pl - Create a new Catalyst Component
+weather_web_create.pl - Create a new Catalyst Component
 
 =head1 SYNOPSIS
 
-weather_create.pl [options] model|view|controller name [helper] [options]
+weather_web_create.pl [options] model|view|controller name [helper] [options]
 
  Options:
    --force        don't create a .new file where a file to be created exists
@@ -22,14 +22,14 @@ weather_create.pl [options] model|view|controller name [helper] [options]
    --help         display this help and exits
 
  Examples:
-   weather_create.pl controller My::Controller
-   weather_create.pl --mechanize controller My::Controller
-   weather_create.pl view My::View
-   weather_create.pl view HTML TT
-   weather_create.pl model My::Model
-   weather_create.pl model SomeDB DBIC::Schema MyApp::Schema create=dynamic\
+   weather_web_create.pl controller My::Controller
+   weather_web_create.pl --mechanize controller My::Controller
+   weather_web_create.pl view My::View
+   weather_web_create.pl view HTML TT
+   weather_web_create.pl model My::Model
+   weather_web_create.pl model SomeDB DBIC::Schema MyApp::Schema create=dynamic\
    dbi:SQLite:/tmp/my.db
-   weather_create.pl model AnotherDB DBIC::Schema MyApp::Schema create=static\
+   weather_web_create.pl model AnotherDB DBIC::Schema MyApp::Schema create=static\
    [Loader opts like db_schema, naming] dbi:Pg:dbname=foo root 4321
    [connect_info opts like quote_char, name_sep]
 

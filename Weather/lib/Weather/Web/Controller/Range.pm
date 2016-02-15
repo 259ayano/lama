@@ -1,4 +1,4 @@
-package Weather::Controller::Range;
+package Weather::Web::Controller::Range;
 use Moose;
 use namespace::autoclean;
 
@@ -6,7 +6,7 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-Weather::Controller::Range - Catalyst Controller
+Weather::Web::Controller::Range - Catalyst Controller
 
 =head1 DESCRIPTION
 

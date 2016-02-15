@@ -1,4 +1,4 @@
-package Weather::Controller::Search;
+package Weather::Web::Controller::Search;
 use Moose;
 use namespace::autoclean;
 use Data::Dumper;
@@ -7,7 +7,7 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-Weather::Controller::Search - Catalyst Controller
+Weather::Web::Controller::Search - Catalyst Controller
 
 =head1 DESCRIPTION
 

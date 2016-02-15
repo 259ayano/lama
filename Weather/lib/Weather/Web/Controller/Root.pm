@@ -1,4 +1,4 @@
-package Weather::Controller::Root;
+package Weather::Web::Controller::Root;
 use Moose;
 use namespace::autoclean;
 
@@ -14,7 +14,7 @@ __PACKAGE__->config(namespace => '');
 
 =head1 NAME
 
-Weather::Controller::Root - Root Controller for Weather
+Weather::Web::Controller::Root - Root Controller for Weather
 
 =head1 DESCRIPTION
 

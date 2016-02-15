@@ -1,4 +1,4 @@
-package Weather::View::CSV;
+package Weather::Web::View::CSV;
 
 use base qw ( Catalyst::View::CSV );
 use strict;
@@ -15,7 +15,7 @@ __PACKAGE__->config (
 
 =head1 NAME
 
-Weather::View::CSV - CSV view for Weather
+Weather::Web::View::CSV - CSV view for Weather
 
 =head1 DESCRIPTION
 

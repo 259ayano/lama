@@ -5,17 +5,17 @@ BEGIN {
 }
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('Weather', 'Server');
+Catalyst::ScriptRunner->run('Weather::Web', 'Server');
 
 1;
 
 =head1 NAME
 
-weather_server.pl - Catalyst Test Server
+weather_web_server.pl - Catalyst Test Server
 
 =head1 SYNOPSIS
 
-weather_server.pl [options]
+weather_web_server.pl [options]
 
    -d --debug           force debug mode
    -f --fork            handle each request in a new process

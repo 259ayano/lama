@@ -1,4 +1,4 @@
-package Weather;
+package Weather::Web;
 use Moose;
 use namespace::autoclean;
 
@@ -28,7 +28,7 @@ our $VERSION = '0.01';
 
 # Configure the application.
 #
-# Note that settings in weather.conf (or other external
+# Note that settings in weather_web.conf (or other external
 # configuration file that you set up manually) take precedence
 # over this when using ConfigLoader. Thus configuration
 # details given here can function as a default configuration,
@@ -36,10 +36,11 @@ our $VERSION = '0.01';
 # local deployment.
 
 __PACKAGE__->config(
-    name => 'Weather',
+    name => 'Weather::Web',
     # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
     enable_catalyst_header => 1, # Send X-Catalyst header
+    default_view => 'TT',
 );
 
 # Start the application
@@ -49,11 +50,11 @@ __PACKAGE__->setup();
 
 =head1 NAME
 
-Weather - Catalyst based application
+Weather::Web - Catalyst based application
 
 =head1 SYNOPSIS
 
-    script/weather_server.pl
+    script/weather_web_server.pl
 
 =head1 DESCRIPTION
 
@@ -61,7 +62,7 @@ Weather - Catalyst based application
 
 =head1 SEE ALSO
 
-L<Weather::Controller::Root>, L<Catalyst>
+L<Weather::Web::Controller::Root>, L<Catalyst>
 
 =head1 AUTHOR
 

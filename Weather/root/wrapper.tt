@@ -66,6 +66,7 @@
   </head>
 
   [%- menu = [
+  { path => 'tornado', name => 'Tornado', namespace => 'tornado' },
   { path => 'data', name => 'Data', namespace => 'data' },
   { path => 'range',    name => 'Range',    namespace => 'range' },
   { path => 'position', name => 'Position', namespace => 'position' },
