@@ -26,8 +26,6 @@ sub connect {
 sub tornado {
     my ($self, $where) = @_;
     my @hashes = $self->select('tornado','*',$where)->hashes;
-	warn Dumper $where; 
-	warn Dumper \@hashes; 
     my @result = map { my $row = $_; $row } @hashes;
     wantarray ? @result : \@result;
 }

@@ -33,7 +33,7 @@ sub index :Path :Args(0) {
 
     # Hello World
 #    $c->stash->{template} = 'range.tt';
-    $c->response->redirect($c->uri_for('/data'));
+    $c->response->redirect($c->uri_for('/tornado'));
 }
 
 =head2 default
