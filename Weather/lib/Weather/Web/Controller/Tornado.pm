@@ -12,31 +12,37 @@ sub index :Path :Args(0) {
     my $csv = Weather::CSV->connect;
     my $params = expand_hash($c->req->params);
     my $search = $params->{search};
-    my $hint = $search->{hint};
-    my $year  = $search->{year};
-    my $month = sprintf("%02d",$search->{month});
-    my $day   = sprintf("%02d",$search->{day});
-    my $ymd  = $year."/".$month."/".$day;
+    my $h = $search->{hint};
+    my $d = $search->{date} || '';
 
     my @where = (
-	{ 'type'    => { like => "%$hint%" } },
-	{ 'date'    => { like => "$ymd%"   } },
-	{ 'fscale'  => { like => "%$hint%" } },
-	{ 'damage1' => { like => "%$hint%" } },
-	{ 'damage2' => { like => "%$hint%" } },
-	{ 'dead'    => $hint },
-	{ 'hurt1'   => $hint },
-	{ 'alldestroy' => $hint },
-	{ 'halfdestroy' => $hint },
-	{ 'detail'  => { like => "%$hint%" } },
+	{ $h ? ('type' => { like => "%$h%" }) : (),
+	  $d ? ('date' => { like => "$d%"  }) : ()},
+	{ $h ? ('position' => { like => "%$h%" }) : (),
+	  $d ? ('date' => { like => "$d%" }) : ()},
+	{ $h ? ('fscale'  => { like => "%$h%" }) : (),
+	  $d ? ('date' => { like => "$d%" }) : ()},
+	{ $h ? ('damage1' => { like => "%$h%" }) : (),
+	  $d ? ('date' => { like => "$d%" }) : ()},
+	{ $h ? ('damage2' => { like => "%$h%" }) : (),
+	  $d ? ('date' => { like => "$d%" }) : ()},
+	{ $h ? ('dead'    => $h) : (),
+	  $d ? ('date' => { like => "$d%" }) : ()},
+	{ $h ? ('hurt1'   => $h) : (),
+	  $d ? ('date' => { like => "$d%" }) : ()},
+	{ $h ? ('alldestroy' => $h) : (),
+	  $d ? ('date' => { like => "$d%" }) : ()},
+	{ $h ? ('halfdestroy' => $h) : (),
+	  $d ? ('date' => { like => "$d%" }) : ()},
+	{ $h ? ('detail'  => { like => "%$h%" }) : (),
+	  $d ? ('date' => { like => "$d%" }) : ()},
 	);
 
-#    date,detail
     my @tornado = $csv->tornado(\@where);
     my @title = qw/type date position fscale damage1 damage2 dead
                    hurt1 alldestroy halfdestroy detail/;
     
-    my $year_list  = ['',1900..2016];
+    my $year_list  = ['',1950..2016];
     my $month_list = ['',1..12];
     my $day_list   = ['',1..31];
     $c->stash->{year_list}  = $year_list;
