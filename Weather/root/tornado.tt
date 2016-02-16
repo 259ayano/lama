@@ -26,10 +26,6 @@ tablesorter = [[0,0]]
 
 </form>
 
-[%- FOREACH p IN show %]
-<h2>[% p.key %]</h2>
-[%- FOREACH b IN p.value %]
-<h3>[% b.key %]</h3>
 <table class="sort" id="list">
   <thead class="header">
 	<tr>
@@ -39,16 +35,14 @@ tablesorter = [[0,0]]
 	</tr>
   </thead>
   <tbody>
-	[%- FOREACH r = b.value %]
+	[%- FOREACH l = list %]
 	<tr>
 	  [%- FOREACH t = th %]
-	  <td class="center" nowrap>[% r.$t %]</td>
+	  <td class="center" nowrap>[% l.$t %]</td>
 	  [%- END %]
 	</tr>
 	[%- END %]
   </tbody>
 </table>
-[%- END %]
-[%- END %]
 
 [%- END # WRAPPER %]
