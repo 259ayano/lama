@@ -1,6 +1,11 @@
 package Weather::Web::Controller::Range;
 use Moose;
 use namespace::autoclean;
+use CGI::Expand qw/expand_hash/;
+use Data::Dumper;
+use LWP::UserAgent;
+use HTML::TreeBuilder;
+use Data::Recursive::Encode;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
@@ -41,18 +46,25 @@ sub index :Path :Args(0) {
 		);
 
 	my $ua  = LWP::UserAgent->new;
+
+	my $temp = $url . join('&', map { "$_=$param{$_}" } keys %param);
+	warn Dumper $temp;
+
 	my $res = $ua->get($url . join('&', map { "$_=$param{$_}" } keys %param));
 	my $con = $res->content;
 	
 	my $tree = HTML::TreeBuilder->new;
 	$tree->parse($con);
 
-	# データの部分を抽出する
+	my $title;
+	my @h3 = $tree->find('h3');
+	next unless @h3;
+
 	my $list;
 	for my $tr ($tree->look_down('id','tablefix1')->find('tr')) {
 		my $line;
-		$line->{prec}  = $prec_hint;
-		$line->{block} = $block_hint;
+#		$line->{prec}  = $prec_hint;
+#		$line->{block} = $block_hint;
 		push @$line, $_->as_text for ($tr->find('td'));
 		push @$list, $line;
 	}

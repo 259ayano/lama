@@ -4,6 +4,7 @@ use namespace::autoclean;
 use CGI::Expand qw/expand_hash/;
 use Data::Dumper;
 use Weather::CSV;
+use Encode;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
@@ -12,7 +13,7 @@ sub index :Path :Args(0) {
     my $csv = Weather::CSV->connect;
     my $params = expand_hash($c->req->params);
     my $search = $params->{search};
-    my $h = $search->{hint};
+    my $h = decode('utf-8',$search->{hint});
     my $d = $search->{date} || '';
 
     my @where = (
@@ -39,9 +40,6 @@ sub index :Path :Args(0) {
 	);
 
     my @tornado = $csv->tornado(\@where);
-    my @title = qw/type date position fscale damage1 damage2 dead
-                   hurt1 alldestroy halfdestroy detail/;
-    
     my $year_list  = ['',1950..2016];
     my $month_list = ['',1..12];
     my $day_list   = ['',1..31];
@@ -49,8 +47,15 @@ sub index :Path :Args(0) {
     $c->stash->{month_list} = $month_list;
     $c->stash->{day_list}   = $day_list;
     $c->stash->{search} = $params->{search};
-    $c->stash->{th} = \@title;
     $c->stash->{list} = \@tornado;
+    $c->stash->{template} = 'tornado.tt';
+}
+
+
+sub detail :Local {
+    my ( $self, $c ) = @_;
+	my $params  = $c->req->params;
+	warn Dumper $params;
     $c->stash->{template} = 'tornado.tt';
 }
 

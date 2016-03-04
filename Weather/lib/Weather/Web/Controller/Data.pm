@@ -34,6 +34,7 @@ sub index :Path :Args(0) {
 	my $block_tbl = "tsv/block";
 
 	my $target = $search->{hint} || 50; # XXXXX 
+
 	my @prec   = `grep -e $target $prec_tbl`;
 	my @monthly = qw/month kiatsu1 kiatsu2 rain_sum rain_d_max rain_h_max rain_10_max
                      temp_d_ave temp_d_max temp_d_min temp_max temp_min
@@ -72,6 +73,11 @@ sub index :Path :Args(0) {
 				);
 
 			my $ua  = LWP::UserAgent->new;
+
+			my $temp = $url . join('&', map { "$_=$param{$_}" } keys %param);
+			warn Dumper $temp;
+
+			
 			my $res = $ua->get($url . join('&', map { "$_=$param{$_}" } keys %param));
 			my $con = $res->content;
 			
@@ -101,6 +107,7 @@ sub index :Path :Args(0) {
 			}
 		}
 	}
+	warn Dumper $list;
 
 	if($param->{csv}){
 		my $file = 'tenki.csv';
