@@ -1,7 +1,20 @@
 [% WRAPPER wrapper.tt
 tablesorter = [[0,0]]
 %]
-
+<script>
+  $(function($){
+	  $(".fancybox").fancybox({
+		  type: 'iframe',
+		  width: '90%',
+		  height: '100%',
+		  iframe : {
+			  preload: false,
+		  },
+		  'afterClose':function () {
+		  },
+	  });
+  });
+</script>
 <form method="post" action="[% c.uri_for(c.action) %]">
   <div style="padding: 3px;">Search:
 	<input type="text" name="search.hint" autofocus="autofocus" id="hint" value="[% search.hint %]" style="width: 150px;">
@@ -33,7 +46,7 @@ tablesorter = [[0,0]]
 	[%- FOREACH l = list %]
 	<tr>
 	  <td class="center" nowrap>
-		<a href="[% c.uri_for('/tornado/detail', { date => l.date, position => l.position }) %]">[% loop.count %]</a>
+		<a class="fancybox" href="[% c.uri_for('/tornado/detail', { date => l.date, position => l.position }) %]">[% loop.count %]</a>
 	  </td>
 	  <td class="center" nowrap>[% l.type %]</td>
 	  <td class="center" nowrap>[% l.date %]</td>

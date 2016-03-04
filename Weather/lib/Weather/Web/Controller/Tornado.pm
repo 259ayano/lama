@@ -55,8 +55,65 @@ sub index :Path :Args(0) {
 sub detail :Local {
     my ( $self, $c ) = @_;
 	my $params  = $c->req->params;
-	warn Dumper $params;
-    $c->stash->{template} = 'tornado.tt';
+	my @date = split(' ',$params->{date});
+	my ($y,$m,$d) = split('/',$date[0]);
+	
+	$date[1] =~ s/(^.+)時頃$/$1/g;
+	$date[1] =~ s/(^.+)頃$/$1/g;
+	my $hour = $date[1] =~ /^(%d{2})$/ ? $1 : (split(":",$date[1]))[0];
+	my $min  = $date[1] =~ /^(%d{2})$/ ? '' : (split(":",$date[1]))[1];
+
+	my ($p,$b) = split(" ",$params->{position});
+	$p =~ s/(^.+)県$/$1/g;
+	$b =~ s/(^.+)市$/$1/g;
+	my ($type,$key) = $c->gettype($y,$m,$d);
+
+    my ($show,$list);
+    my @prec   = $c->pdata($p);
+	for (@prec) {
+		chomp;
+		my ($p_name, $p_code) = split "," , $_;
+		my @block = $c->bdata($p_code,$b);
+
+		for (@block) {
+			chomp;
+			my ($b_name, $p_code, $b_code) = split "," , $_;
+
+			# 気象庁のサイトにアクセスしてコンテンツを取得
+
+			my $con = $c->getjma($p_code,$b_code,$y,$m,$d,$type);
+			
+			# HTML::TreeBuilderで解析する
+
+			my $tree = HTML::TreeBuilder->new;
+			$tree->parse($con);
+
+			# データの部分を抽出する
+
+			my $title;
+			my @h3 = $tree->find('h3');
+			next unless @h3;
+			push @$title, $_->as_text for @h3;
+
+			for my $tr ($tree->look_down('id','tablefix1')->find('tr')) {
+				my $line;
+				my $count = 0;
+				$line->{prec}  = $p_code;
+				$line->{block} = $b_code;
+				for ($tr->find('td')){
+					$line->{$key->[$count]} = $_->as_text;
+					$count++;
+				}
+				push @$list, $line;
+				push @{$show->{"$p_code:$p_name"}->{"$b_code:$b_name"}}, $line;
+			}
+		}
+
+	}
+
+    $c->stash->{th} = $key;
+    $c->stash->{show} = $show;
+    $c->stash->{template} = 'tornado-detail.tt';
 }
 
 __PACKAGE__->meta->make_immutable;

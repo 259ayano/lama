@@ -1,6 +1,7 @@
 package Weather::Web;
 use Moose;
 use namespace::autoclean;
+use Data::Dumper;
 
 use Catalyst::Runtime 5.80;
 
@@ -46,6 +47,66 @@ __PACKAGE__->config(
 # Start the application
 __PACKAGE__->setup();
 
+my @monthly = qw/month kiatsu1 kiatsu2 rain_sum rain_d_max rain_h_max rain_10_max
+                     temp_d_ave temp_d_max temp_d_min temp_max temp_min
+                     wet_ave wet_min wind_ave wind_max1 wind_max_dir1
+                     wind_max2 wind_max_dir2 sun1 sun2 snow_sum snow_sum_max snow_max
+                     cloud_ave snow_day mist_day Thunder_day/;
+my @daily   = qw/day kiatsu1 kiatsu2 rain_sum rain_h_max rain_10_max
+                     temp_d_ave temp_d_max temp_d_min wet_ave wet_min wind_ave
+                     wind_max1 wind_max_dir1 wind_max2 wind_max_dir2 sun
+                     snow_sum snow_max tenki tenki_n/;
+my @hourly  = qw/hour kiatsu1 kiatsu2 rain temp roten jyoki wet wind wind_dir
+                     sun1 sun2 snow1 snow2 tenki cloud see/;
+
+my $block_tbl = "tsv/block";
+my $prec_tbl  = "tsv/prec";
+
+sub pdata {
+	my ($class,$p) = @_;
+    my @prec  = `grep -e $p $prec_tbl`;
+	@prec;
+}
+
+sub bdata {
+	my ($class,$prec_code,$b) = @_;
+	my @block;
+	if ($b ne ''){
+		my @b1   = `grep -e ',$prec_code,$b' $block_tbl`;
+		my @b2   = `grep -e '$b,$prec_code,' $block_tbl`;
+		@block = (@b1,@b2);
+	} else {
+		@block   = `grep -e ',$prec_code,' $block_tbl`;
+	}
+	@block;
+}
+
+sub gettype {
+	my ($class,$y,$m,$d) = @_;
+    my $type = $y && $m && $d ? 'hourly' : $y && $m ? 'daily' : $y ? 'monthly' : '';
+    my @key = $type eq 'hourly' ? @hourly :
+		      $type eq 'daily'  ? @daily  : $type eq 'monthly' ? @monthly  : ();
+	
+	$type,\@key;
+}
+
+sub getjma {
+	my ($class,$p_code,$b_code,$y,$m,$d,$type) = @_;
+	my $url = "http://www.data.jma.go.jp/obd/stats/etrn/view/${type}_s1.php?";
+	my %param = (
+		prec_no => $p_code,
+		block_no => $b_code,
+		year => $y || '2016',
+		month => $m,
+		day => $d,
+		view => '',
+		);
+
+	my $ua  = LWP::UserAgent->new;
+	my $res = $ua->get($url . join('&', map { "$_=$param{$_}" } keys %param));
+	my $con = $res->content;
+	$con;
+}
 =encoding utf8
 
 =head1 NAME

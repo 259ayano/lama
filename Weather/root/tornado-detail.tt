@@ -1,0 +1,31 @@
+[% WRAPPER wrapper.tt
+highcharts = 1
+tablesorter = [[0,0]]
+%]
+
+[%- FOREACH p IN show %]
+<h2>[% p.key %]</h2>
+[%- FOREACH b IN p.value %]
+<h3>[% b.key %]</h3>
+<table class="sort" id="list">
+  <thead class="header">
+	<tr>
+	  [%- FOREACH t = th %]
+	  <th nowrap>[% t %]</th>
+	  [%- END %]
+	</tr>
+  </thead>
+  <tbody>
+	[%- FOREACH r = b.value %]
+	<tr>
+	  [%- FOREACH t = th %]
+	  <td class="center" nowrap>[% r.$t %]</td>
+	  [%- END %]
+	</tr>
+	[%- END %]
+  </tbody>
+</table>
+[%- END %]
+[%- END %]
+
+[%- END # WRAPPER %]
