@@ -1,7 +1,8 @@
-<!DOCTYPE html "-//W3C//DTD XHTML 1.0 Strict//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head lang="ja">
-	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+	<!-- mode: html; coding: utf-8;-->
+	<html>
+	<head lang="ja">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="Content-Script-Type" content="text/javascript">
 	<meta http-equiv="content-style-type" content="text/css">
@@ -68,9 +69,7 @@
   [%- menu = [
   { path => 'tornado', name => 'Tornado', namespace => 'tornado' },
   { path => 'data', name => 'Data', namespace => 'data' },
-  { path => 'range',    name => 'Range',    namespace => 'range' },
   { path => 'position', name => 'Position', namespace => 'position' },
-  { path => 'search', name => 'Search', namespace => 'search' },
   ]
   -%]
 

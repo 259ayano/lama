@@ -5,10 +5,10 @@ tablesorter = [[0,0]]
 
 <form method="post" action="[% c.uri_for(c.action) %]">
   <div style="padding: 3px;">Search:
-	<input type="text" name="search.hint" autofocus="autofocus" id="hint" value="[% search.hint %]" style="width: 150px;">
+	<input type="text" name="search.hint" autofocus="autofocus" id="hint" value="[% search.hint || 50 %]" style="width: 150px;">
 	<select style="width:80px" name="search.year">
 	  [%- FOREACH y = year_list %]
-	  <option value="[% y %]" [% IF y == search.year %]selected[% END %]>[% y %]</option>
+	  <option value="[% y %]" [% IF y == search.year %]selected[% END %]>[% y || 2016 %]</option>
 	  [%- END %]
 	</select>
 	<select style="width:50px" name="search.month">
